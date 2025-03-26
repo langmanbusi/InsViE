@@ -2,7 +2,6 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-InsViE-b31b1b.svg)](https://arxiv.org) ![Pytorch](https://img.shields.io/badge/PyTorch->=2.4.0-Red?logo=pytorch)
 
-https://github.com/langmanbusi/InsViE/blob/c64bcbdc6acc80fd95001bcea4b353e81c0fbaff/assets/insvie_demo_1.mov
 
 ### Abstract
 
