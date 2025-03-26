@@ -2,7 +2,11 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-InsViE-b31b1b.svg)](https://arxiv.org) ![Pytorch](https://img.shields.io/badge/PyTorch->=2.4.0-Red?logo=pytorch)
 
+Yuhui Wu, Liyi Chen, Ruibin Li, Shihao Wang, Chenxi Xie, Lei Zhang*
 
+(*Corresponding Author)
+
+The Hong Kong Polytechnic University, OPPO Research Institute
 
 https://github.com/user-attachments/assets/846f1fc3-3200-4e26-b4a5-2124cedee571
 
