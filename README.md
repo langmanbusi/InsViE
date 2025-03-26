@@ -2,6 +2,7 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-InsViE-b31b1b.svg)](https://arxiv.org) ![Pytorch](https://img.shields.io/badge/PyTorch->=2.4.0-Red?logo=pytorch)
 
+https://github.com/langmanbusi/InsViE/blob/541bb2103666e0a53245996070f6171b9c422d7d/assets/insvie_demo.mp4
 
 ### Abstract
 
