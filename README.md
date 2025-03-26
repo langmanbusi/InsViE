@@ -11,7 +11,7 @@ Instruction-based video editing allows effective and interactive editing of vide
 <br>
 
 ### Updates
-- [3/25/2025] Paper is available on ArXiv.
+- [3/xx/2025] Paper is available on ArXiv.
 
 
 ### TODO 
