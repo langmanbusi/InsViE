@@ -1,4 +1,4 @@
-## InsViE: Effective Instruction-based Video Editing with Elaborate Dataset Construction
+## InsViE-1M: Effective Instruction-based Video Editing with Elaborate Dataset Construction
 
 [![arXiv](https://img.shields.io/badge/arXiv-InsViE-b31b1b.svg)](https://arxiv.org) ![Pytorch](https://img.shields.io/badge/PyTorch->=2.4.0-Red?logo=pytorch)
 
