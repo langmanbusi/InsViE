@@ -1,6 +1,6 @@
 ## InsViE-1M: Effective Instruction-based Video Editing with Elaborate Dataset Construction
 
-[![arXiv](https://img.shields.io/badge/arXiv-InsViE-b31b1b.svg)](https://arxiv.org) ![Pytorch](https://img.shields.io/badge/PyTorch->=2.4.0-Red?logo=pytorch)
+[![arXiv](https://img.shields.io/badge/arXiv-InsViE-b31b1b.svg)](https://arxiv.org/abs/2503.20287) ![Pytorch](https://img.shields.io/badge/PyTorch->=2.4.0-Red?logo=pytorch)
 
 Yuhui Wu<sup>1,2</sup>, Liyi Chen<sup>1</sup>, Ruibin Li<sup>1,2</sup>, Shihao Wang<sup>1</sup>, Chenxi Xie<sup>1,2</sup>, Lei Zhang<sup>1,2</sup>*
 
