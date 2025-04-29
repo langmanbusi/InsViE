@@ -28,6 +28,87 @@ Instruction-based video editing allows effective and interactive editing of vide
 - [ ] Release the InsViE-1M dataset.
 - [ ] Update the code for training.
 
+
+## Usage
+
+### Installation
+
+Clone the repo and install dependent packages
+
+```bash
+https://github.com/langmanbusi/InsViE.git
+cd InsViE
+
+# follow the instruction of original CogVideoX repo
+cd CogVideo
+pip install -r requirements.txt
+cd sat
+pip install -r requirements.txt
+# use the given environment.yml
+conda env create -f environment.yml
+
+```
+
+### Inference 
+
+First download the weights of T5 and VAE models follow the instruction of [CogVideoX](https://github.com/THUDM/CogVideo/blob/main/sat/README.md).
+
+Then download the weight of our [InsViE](). The floder structure is the same with original CogVideo:
+
+```
+.
+├── train_edit
+    ├── 1000 (or 1)
+    │   └── mp_rank_00_model_states.pt
+    └── latest 
+```
+
+You should also modify the configs in `InsViE/CogVideo/sat/config`, such as the path to the pretrained models, refer to [link](https://github.com/THUDM/CogVideo/blob/main/sat/README_zh.md#3-%E4%BF%AE%E6%94%B9configscogvideox_yaml%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6).
+
+```yaml
+args:
+  image2video: False # True for image2video, False for text2video
+  latent_channels: 16
+  mode: inference
+  load: "/xxx/ckpts_2b_lora/train_edit" # This is for Full model without lora adapter
+  batch_size: 1
+  input_type: txt # You can choose txt for pure text input, or change to cli for command line input 
+  input_file: /xxx/mytest.csv # prepare a test csv, which stores the video file names and instructions in each row
+  test_folder: mytest # the folder contains the videos corresponding to the input_file (mytest.csv)
+  sampling_image_size: [480, 720] # [480, 720]
+  sampling_num_frames: 13  # Must be 13, 11 or 9
+  sampling_fps: 7
+  fp16: True # For CogVideoX-2B
+  # bf16: True # For CogVideoX-5B and CoGVideoX-5B-I2V
+  output_dir: /xxx/ # set the folder of the outputs
+  force_inference: True
+```
+
+Then run the script.
+
+```bash
+cd InsViE/CogVideo/sat
+bash inference.sh
+```
+
+### InsViE-1M Dataset
+
+[![Dataset](https://img.shields.io/badge/HuggingFace-Dataset-orange)](https://huggingface.co/datasets/wyh6666/InsViE)
+
+
+## Citation
+
+If you find this work helpful, please consider citing:
+
+```
+@article{wu2025insvie,
+  title={InsViE-1M: Effective Instruction-based Video Editing with Elaborate Dataset Construction},
+  author={Wu, Yuhui and Chen, Liyi and Li, Ruibin and Wang, Shihao and Xie, Chenxi and Zhang, Lei},
+  journal={arXiv preprint arXiv:2503.20287},
+  year={2025}
+}
+```
+
 <!-- ### Environment
 
 ### Inference
