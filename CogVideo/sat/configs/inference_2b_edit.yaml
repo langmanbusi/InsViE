@@ -1,0 +1,16 @@
+args:
+  image2video: False # True for image2video, False for text2video
+  latent_channels: 16
+  mode: inference
+  load: "/xxx/ckpts_2b_lora/train_edit_style240k_addn_crop_wlpips_winsp2pstatic100k_0-12-25-20-01" # This is for Full model without lora adapter
+  batch_size: 1
+  input_type: txt # You can choose txt for pure text input, or change to cli for command line input 
+  input_file: /xxx/mytest.csv # store the video file names and instructions in each row
+  test_folder: mytest # the folder contains the videos corresponding to the input_file (mytest.csv)
+  sampling_image_size: [480, 720] # [480, 720]
+  sampling_num_frames: 13  # Must be 13, 11 or 9
+  sampling_fps: 7
+  fp16: True # For CogVideoX-2B
+  # bf16: True # For CogVideoX-5B and CoGVideoX-5B-I2V
+  output_dir: /xxx/
+  force_inference: True

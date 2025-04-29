@@ -1,0 +1,54 @@
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python 调试程序: train_video_edit.py",
+            "type": "python",
+            "request": "launch",
+            "justMyCode": false,
+            "program": "${workspaceFolder}/sat/train_video_edit.py",
+            "console": "integratedTerminal",
+            "env": {
+                "WORLD_SIZE": "1",
+                "RANK": "0",
+                "LOCAL_RANK": "0",
+                "LOCAL_WORLD_SIZE": "1"
+            },
+            "args": [
+                "--base",
+                "sat/configs/cogvideox_2b_edit.yaml",
+                "sat/configs/sft_edit.yaml",
+                "--seed",
+                "1"
+            ]
+        }
+    ]
+}
+
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "name": "Python 调试程序: sample_video.py",
+//             "type": "python",
+//             "request": "launch",
+//             "justMyCode": false,
+//             "program": "${workspaceFolder}/sat/sample_video.py",
+//             "console": "integratedTerminal",
+//             "env": {
+//                 "WORLD_SIZE": "1",
+//                 "RANK": "0",
+//                 "LOCAL_RANK": "0",
+//                 "LOCAL_WORLD_SIZE": "1"
+//             },
+//             "args": [
+//                 "--base",
+//                 "sat/configs/cogvideox_2b.yaml",
+//                 "sat/configs/inference_2b.yaml",
+//                 "--seed",
+//                 "1"
+//             ]
+//         }
+//     ]
+// }
