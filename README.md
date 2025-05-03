@@ -53,7 +53,7 @@ conda env create -f environment.yml
 
 First download the weights of T5 and VAE models follow the instruction of [CogVideoX](https://github.com/THUDM/CogVideo/blob/main/sat/README.md).
 
-Then download the weight of our [InsViE](). The floder structure is the same with original CogVideo:
+Then download the weight of our [InsViE](https://huggingface.co/wyh6666/InsViE). The floder structure is the same with original CogVideo:
 
 ```
 .
