@@ -1,6 +1,9 @@
 ## InsViE-1M: Effective Instruction-based Video Editing with Elaborate Dataset Construction
 
-[![arXiv](https://img.shields.io/badge/arXiv-InsViE-b31b1b.svg)](https://arxiv.org/abs/2503.20287) ![Pytorch](https://img.shields.io/badge/PyTorch->=2.4.0-Red?logo=pytorch)
+[![arXiv](https://img.shields.io/badge/arXiv-InsViE-b31b1b.svg)](https://arxiv.org/abs/2503.20287) 
+![Pytorch](https://img.shields.io/badge/PyTorch->=2.4.0-Red?logo=pytorch)  
+[![Dataset](https://img.shields.io/badge/HuggingFace-Dataset-orange)](https://huggingface.co/datasets/wyh6666/InsViE)
+[![Model](https://img.shields.io/badge/HuggingFace-Model-orange)](https://huggingface.co/wyh6666/InsViE)
 
 Yuhui Wu<sup>1,2</sup>, Liyi Chen<sup>1</sup>, Ruibin Li<sup>1,2</sup>, Shihao Wang<sup>1</sup>, Chenxi Xie<sup>1,2</sup>, Lei Zhang<sup>1,2</sup>*
 
@@ -23,9 +26,9 @@ Instruction-based video editing allows effective and interactive editing of vide
 
 
 ### TODO 
-- [ ] Release the pretrained model.
-- [ ] Update the code for inference.
-- [ ] Release the InsViE-1M dataset.
+- [x] Release the pretrained model.
+- [x] Update the code for inference.
+- [x] Release the InsViE-1M dataset.
 - [ ] Update the code for training.
 
 
