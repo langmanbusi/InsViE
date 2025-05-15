@@ -13,7 +13,7 @@ Yuhui Wu<sup>1,2</sup>, Liyi Chen<sup>1</sup>, Ruibin Li<sup>1,2</sup>, Shihao W
 
 [<img src="https://img.shields.io/badge/YouTube-Video-red?logo=youtube&logoColor=white&style=for-the-badge" height="40">](https://www.youtube.com/watch?v=z4t3RkqZ4no)
 
-▶️ Watch our demo video on Youtube with better visual effects. We provide a smoother video and add more editing results.
+▶️ Watch our demo video on Youtube. We provide a smoother video and add more editing results. It is suggested to alter the resolution for better visual quality.
 
 https://www.youtube.com/watch?v=z4t3RkqZ4no
 
