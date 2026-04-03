@@ -35,7 +35,7 @@ Instruction-based video editing allows effective and interactive editing of vide
 - [x] Release the pretrained model.
 - [x] Update the code for inference.
 - [x] Release the InsViE-1M dataset.
-- [ ] Update the code for training.
+- [x] Update the code for training.
 
 
 ## Usage
@@ -100,6 +100,51 @@ cd InsViE/CogVideo/sat
 bash inference.sh
 ```
 
+### Training
+
+This project provides scripts and configs for edit fine-tuning (`train_video_edit.py` + `configs/cogvideox_2b_lora_edit.yaml` + `configs/sft_edit_resume_nv.yaml`).
+
+1. Prepare pretrained weights:
+   - `CogVideoX-2b-sat/transformer` (or LoRA checkpoint directory)
+   - `CogVideoX-2b-sat/vae/3d-vae.pt`
+   - `t5-v1_1-xxl` (T5 encoder model)
+
+2. Update configuration paths:
+   - In `configs/cogvideox_2b_lora_edit.yaml`:
+     - set `conditioner_config.params.emb_models[0].params.model_dir` to your T5 path
+     - set `first_stage_config.params.ckpt_path` to your 3D VAE weight path
+   - In `configs/sft_edit_resume_nv.yaml`:
+     - set `args.load` to transformer weights
+     - set `args.save` to output checkpoint directory
+     - set `data.params.train_video_root` / `data.params.test_video_root` and `data.path` to dataset paths
+
+3. Single-GPU training example:
+
+```bash
+cd InsViE/CogVideo/sat
+bash finetune_single_gpu.sh
+```
+
+4. Multi-GPU training example:
+
+```bash
+cd InsViE/CogVideo/sat
+bash finetune_multi_gpus.sh
+# or NV environment
+bash finetune_multi_gpus_nv.sh
+```
+
+5. Alternatively run directly:
+
+```bash
+cd InsViE/CogVideo/sat
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True torchrun --standalone --nproc_per_node=8 train_video_edit.py --base configs/cogvideox_2b_lora_edit.yaml configs/sft_edit_resume_nv.yaml --seed $RANDOM
+```
+
+6. Verify training results:
+   - `args.save` directory contains `train_edit_*` checkpoint folders
+   - `training_config.yaml` is saved during first iteration for reproducibility
+
 ### InsViE-1M Dataset
 
 [![Dataset](https://img.shields.io/badge/HuggingFace-Dataset-orange)](https://huggingface.co/datasets/wyh6666/InsViE)
@@ -116,20 +161,3 @@ If you find this work helpful, please consider citing:
   journal={arXiv preprint arXiv:2503.20287},
   year={2025}
 }
-```
-
-<!-- ### Environment
-
-### Inference
-
-### Training
-
-#### -Data Construction
-
-#### -Model Training
-
-### Citation
-```
-
-
-```  -->

@@ -1,0 +1,72 @@
+args:
+  checkpoint_activations: True # using gradient checkpointing
+  model_parallel_size: 1
+  experiment_name: train_edit_style240k_addn_crop_wlpips_winsp2pstatic100k_wstatic250k_0 # train_edit_style640k_crop_lora32_fixproj_0 # train_edit_style240k_testresume_1 train_edit_style1m_addn_crop_lora128_frameloss_s2_woreal_0
+  mode: finetune
+  load: "/mnt/data/cpfs/cfps/personal/wyh/cogvideo_data/hf_ckpt/transformer-2b"
+  no_load_rng: True
+  train_iters: 50000 # Suggest more than 1000 For Lora and SFT For 500 is enough
+  eval_iters: 20 # eval 视频个数
+  eval_interval: 2000 # 10 # 500
+  eval_batch_size: 1
+  save: /mnt/data/cpfs/cfps/personal/wyh/cogvideo_data/ckpts_2b_lora
+  save_interval: 2000 # 10 # 2000
+  log_interval: 100 # 2 # 100
+  train_data: [ "/mnt/data/cpfs/cfps/personal/wyh/cogvideo_data/train_insvie_align.csv" ] # Train data path: train_align_w800k real_static_940k static470k
+  # put the training data under '/efs/ylab-efs/wuyuhui/data/wyh_data_link/pexel_openvid_samples/'
+  valid_data: [ "/mnt/data/cpfs/cfps/personal/wyh/cogvideo_data/mytest_object.csv" ] # Validation data path, you can input your own test set here
+  split: 1,0,0
+  num_workers: 8
+  force_train: True
+  only_log_video_latents: False 
+  resume_dataloader: False
+
+data:
+  target: data_video.SFTDataset_edit
+  params:
+    video_size: [ 480, 720 ]
+    fps: 7
+    max_num_frames: 25
+    skip_frms_num: 0.
+    train_video_root: ["source_filter", "edit_filter"]
+    test_video_root: ["mytest"] # test
+    # train_data_sources: ["pexel", "pexel-static", "openvid", "openvid-static"]
+    # train_data_sources: ["instructp2p", "magicbrush", "pexel", "pexel-static", "openvid", "openvid-static"]
+
+
+deepspeed:
+  # Minimum for 16 videos per batch for ALL GPUs, This setting is for 8 x A100 GPUs
+  train_micro_batch_size_per_gpu: 2
+  gradient_accumulation_steps: 1
+  steps_per_print: 50
+  gradient_clipping: 0.1
+  zero_optimization:
+    stage: 2
+    cpu_offload: false
+    contiguous_gradients: false
+    overlap_comm: true
+    reduce_scatter: true
+    reduce_bucket_size: 1000000000
+    allgather_bucket_size: 1000000000
+    load_from_fp32_weights: false
+  zero_allow_untested_optimizer: true
+  bf16:
+      enabled: True  # For CogVideoX-2B Turn to False and For CogVideoX-5B Turn to True
+  fp16:
+      enabled: False  # For CogVideoX-2B Turn to True and For CogVideoX-5B Turn to False
+  loss_scale: 0
+  loss_scale_window: 400
+  hysteresis: 2
+  min_loss_scale: 1
+
+  optimizer:
+    type: sat.ops.FusedEmaAdam
+    params:
+      lr: 0.0008 # Between 1E-3 and 5E-4 For Lora and 1E-5 For SFT
+      betas: [ 0.9, 0.95 ]
+      eps: 1e-8
+      weight_decay: 1e-4
+  activation_checkpointing:
+    partition_activations: false
+    contiguous_memory_optimization: false
+  wall_clock_breakdown: false

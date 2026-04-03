@@ -114,53 +114,20 @@ def read_video(
     return vframes, aframes, info
 
 
-def resize_for_rectangle_crop_random(arr, arr_edit, image_size, reshape_mode="random", is_test=False):
-    reshape_mode = 'random'
-
-    if is_test:
-        reshape_mode = 'center'
-        if arr.shape[3] / arr.shape[2] > image_size[1] / image_size[0]:
-            arr = resize(
-                arr,
-                size=[image_size[0], int(arr.shape[3] * image_size[0] / arr.shape[2])],
-                interpolation=InterpolationMode.BICUBIC,
-            )
-        else:
-            arr = resize(
-                arr,
-                size=[int(arr.shape[2] * image_size[1] / arr.shape[3]), image_size[1]],
-                interpolation=InterpolationMode.BICUBIC,
-            )
-
-    h, w = arr.shape[2], arr.shape[3]
-
-    if not is_test:
-        if h == w:
-            reshape_mode == "center"
-            arr = resize(arr, size=[image_size[0], image_size[1]], interpolation=InterpolationMode.BICUBIC)
-            h, w = arr.shape[2], arr.shape[3]
-            arr = arr.squeeze(0)
-        else: 
-            arr = arr.squeeze(0)
+def resize_for_rectangle_crop(arr, image_size, reshape_mode="random"):
+    if arr.shape[3] / arr.shape[2] > image_size[1] / image_size[0]:
+        arr = resize(
+            arr,
+            size=[image_size[0], int(arr.shape[3] * image_size[0] / arr.shape[2])],
+            interpolation=InterpolationMode.BICUBIC,
+        )
     else:
-        arr = arr.squeeze(0)
+        arr = resize(
+            arr,
+            size=[int(arr.shape[2] * image_size[1] / arr.shape[3]), image_size[1]],
+            interpolation=InterpolationMode.BICUBIC,
+        )
 
-    delta_h = h - image_size[0]
-    delta_w = w - image_size[1]
-
-    if reshape_mode == "random" or reshape_mode == "none":
-        top = np.random.randint(0, delta_h + 1)
-        left = np.random.randint(0, delta_w + 1)
-    elif reshape_mode == "center":
-        top, left = delta_h // 2, delta_w // 2
-    else:
-        raise NotImplementedError
-    arr = TT.functional.crop(arr, top=top, left=left, height=image_size[0], width=image_size[1])
-    arr_edit = TT.functional.crop(arr_edit, top=top, left=left, height=image_size[0], width=image_size[1])
-    return arr, arr_edit
-
-
-def rectangle_crop(arr, image_size, reshape_mode="random"):
     h, w = arr.shape[2], arr.shape[3]
     arr = arr.squeeze(0)
 
@@ -512,10 +479,51 @@ class SFTDataset_edit(Dataset):
             self.samples = sorted(list(reader)[1:]) # each row contains [source video name, source caption, instruct, edit caption, edit subfolder name]
         
         for row in self.samples:
+            # self.captions.append(row[2])
+            # video_name, subfolder_name = row[0], row[-1]
+            # self.video_name.append(video_name[:-4])
+            # video_root = os.path.join('/', *data_dir.split('/')[:-1])
 
-            self.test = False
-            if 'mytest' in self.csv_path.split('/')[-1]: # use mytest in the name of the csv file to choose the dataset mode of "test" or "train"
-                self.test = True
+            # video_path_source = os.path.join(video_root, 'source', video_name) # in our implementation, the videos and the csv are in the same root
+            # video_path_edited = os.path.join(video_root, subfolder_name, video_name)
+            # self.video_paths_source.append(video_path_source)
+            # self.video_paths_edited.append(video_path_edited)
+
+            # subfolder_name includes: 
+            # instructp2p: svd_instructp2p_videos_csvs/instructp2p_100k_source, instructp2p_100k_edit
+            # magicbrush: svd_magicbrush_videos_csvs/magicbrush_source, magicbrush_100k_edit
+            # davis-object/style/color: codef_davis_videos_csvs/object, style, color
+            # openvid-object/style/color: codef_openvid_videos_csvs/object, style, color
+
+            # if 'instructp2p' in subfolder_name:
+            #     video_path_source = os.path.join(video_root, 'svd_instructp2p_videos_csvs/instructp2p_100k_source', 'instructp2p-' + video_name) 
+            #     video_path_edited = os.path.join(video_root, 'svd_instructp2p_videos_csvs/instructp2p_100k_edit', 'instructp2p-' + video_name)
+            #     self.video_paths_source.append(video_path_source)
+            #     self.video_paths_edited.append(video_path_edited)
+            # elif 'magicbrush' in subfolder_name:
+            #     video_path_source = os.path.join(video_root, 'svd_magicbrush_videos_csvs/magicbrush_source', video_name) 
+            #     video_path_edited = os.path.join(video_root, 'svd_magicbrush_videos_csvs/magicbrush_edit', video_name)
+            #     self.video_paths_source.append(video_path_source)
+            #     self.video_paths_edited.append(video_path_edited)
+            # elif 'davis' in subfolder_name:
+            #     video_path_source = os.path.join(video_root, 'rave_davis_videos_csvs/source', video_name) 
+            #     # print(subfolder_name)
+            #     video_path_edited = os.path.join(video_root, 'codef_davis_videos_csvs', subfolder_name.split('-')[1], video_name)
+            #     self.video_paths_source.append(video_path_source)
+            #     self.video_paths_edited.append(video_path_edited)
+            # elif 'openvid' in subfolder_name:
+            #     video_path_source = os.path.join(video_root, 'codef_openvid_videos_csvs/source', video_name) 
+            #     video_path_edited = os.path.join(video_root, 'codef_openvid_videos_csvs', subfolder_name.split('-')[1], video_name)
+            #     self.video_paths_source.append(video_path_source)
+            #     self.video_paths_edited.append(video_path_edited)
+
+            # if 'instructp2p' not in video_name:
+            #     video_path_source = os.path.join(video_root, 'source_filter', video_name) # in our implementation, the videos and the csv are in the same root
+            #     video_path_edited = os.path.join(video_root, 'edit_filter', video_name)
+            #     self.video_paths_source.append(video_path_source)
+            #     self.video_paths_edited.append(video_path_edited)
+
+            if 'mytest' in self.csv_path.split('/')[-1]:
                 self.captions.append(row[1])
                 video_name = row[0]
                 self.video_name.append(video_name[:-4])
@@ -526,19 +534,14 @@ class SFTDataset_edit(Dataset):
                 self.video_paths_edited.append(video_path_edited)
             else:
                 video_name = row[0]
-                self.captions.append(row[2])
-                self.video_name.append(video_name[:-4])
-                video_root = os.path.join('/', *data_dir.split('/')[:-1])
-                video_path_source = os.path.join(video_root, self.train_video_root[0], video_name) # in our implementation, the videos and the csv are in the same root
-                video_path_edited = os.path.join(video_root, self.train_video_root[1], video_name)
-                self.video_paths_source.append(video_path_source)
-                self.video_paths_edited.append(video_path_edited)
-                if 'pexel' in video_name or 'openvid' in video_name:
-                    if random.random() < 0.05:
-                        self.captions.append('')
-                        self.video_name.append(video_name[:-4])
-                        self.video_paths_source.append(video_path_source)
-                        self.video_paths_edited.append(video_path_source)
+                if 'instructp2p' not in video_name:
+                    self.captions.append(row[2])
+                    self.video_name.append(video_name[:-4])
+                    video_root = os.path.join('/', *data_dir.split('/')[:-1])
+                    video_path_source = os.path.join(video_root, self.train_video_root[0], video_name) # in our implementation, the videos and the csv are in the same root
+                    video_path_edited = os.path.join(video_root, self.train_video_root[1], video_name)
+                    self.video_paths_source.append(video_path_source)
+                    self.video_paths_edited.append(video_path_edited)
 
 
         print_rank0('Data in --' + data_dir + '-- contains ' + str(len(self.video_paths_source)) + ' video pairs.')
@@ -612,34 +615,19 @@ class SFTDataset_edit(Dataset):
                 assert temp_frms_edited is not None
                 tensor_frms_edited = torch.from_numpy(temp_frms_edited) if type(temp_frms_edited) is not torch.Tensor else temp_frms_edited
 
-        # old crop version
-        # tensor_frms_source = pad_last_frame(
-        #     tensor_frms_source, self.max_num_frames
-        # )  # the len of indices may be less than num_frames, due to round error
-        # tensor_frms_source = tensor_frms_source.permute(0, 3, 1, 2)  # [T, H, W, C] -> [T, C, H, W]
-        # tensor_frms_source = resize_for_rectangle_crop(tensor_frms_source, self.video_size, reshape_mode="center", is_test=self.test)
-        # tensor_frms_source = (tensor_frms_source - 127.5) / 127.5
-
-        # tensor_frms_edited = pad_last_frame(
-        #     tensor_frms_edited, self.max_num_frames
-        # )  # the len of indices may be less than num_frames, due to round error
-        # tensor_frms_edited = tensor_frms_edited.permute(0, 3, 1, 2)  # [T, H, W, C] -> [T, C, H, W]
-        # tensor_frms_edited = resize_for_rectangle_crop(tensor_frms_edited, self.video_size, reshape_mode="center", is_test=self.test)
-        # tensor_frms_edited = (tensor_frms_edited - 127.5) / 127.5
-
-        # new crop version
         tensor_frms_source = pad_last_frame(
             tensor_frms_source, self.max_num_frames
         )  # the len of indices may be less than num_frames, due to round error
         tensor_frms_source = tensor_frms_source.permute(0, 3, 1, 2)  # [T, H, W, C] -> [T, C, H, W]
+        tensor_frms_source = resize_for_rectangle_crop(tensor_frms_source, self.video_size, reshape_mode="center")
+        tensor_frms_source = (tensor_frms_source - 127.5) / 127.5
+
         tensor_frms_edited = pad_last_frame(
             tensor_frms_edited, self.max_num_frames
         )  # the len of indices may be less than num_frames, due to round error
         tensor_frms_edited = tensor_frms_edited.permute(0, 3, 1, 2)  # [T, H, W, C] -> [T, C, H, W]
-        tensor_frms_source, tensor_frms_edited = resize_for_rectangle_crop_random(tensor_frms_source, tensor_frms_edited, self.video_size, reshape_mode="center", is_test=self.test)
-        tensor_frms_source = (tensor_frms_source - 127.5) / 127.5
+        tensor_frms_edited = resize_for_rectangle_crop(tensor_frms_edited, self.video_size, reshape_mode="center")
         tensor_frms_edited = (tensor_frms_edited - 127.5) / 127.5
-
 
         item = {
             "mp4": tensor_frms_source,
